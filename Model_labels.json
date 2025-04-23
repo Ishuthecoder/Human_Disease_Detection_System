@@ -1,0 +1,21 @@
+{
+    "Multi_Cancer_Model1": [
+      "Benign", "all_early", "all_pre", "all_pro",
+      "Brain Glioma", "Brain_Menin", "Brain Tumor", "Breast Benign",
+      "Breast Maligant", "cervical dysplasia", "Squamous cell carcinoma", "Cervical MEP",
+      "Cervix Pain", "Cervix Cancer", "Cervix Insufficiency", "Kidney Tumor",
+      "Normal Kidney", "Colon ACA", "Colon BNT", "Lung ACA", "Lung SSC", "Lung BNT",
+      "LYMPH CLL", "Lymph fluid", "LYMPH MCL", "Normal Oral" , "Oral SSC"
+    ],
+    "Covid_Model_Infection": ["COVID Positive", "COVID Negative", "Normal"],
+    "Covid_Model_Segmentation": ["COVID Positive", "COVID Negative", "Normal"],
+    "ISIC_deseases": [
+      "Actinic keratosis", "Basal cell carcinoma", "Benign keratosis", "Dermatofibroma",
+      "Melanocytic Nevus", "Melanoma", "Vascular Lesion", "Normal"
+    ],
+    "Completed_project": [
+      "Avulsion fracture", "Comminuted fracture", "Fracture Dislocation", "Greenstick fracture",
+      "Hairline Fracture", "Impacted fracture", "Longitudinal fractur", "Oblique fracture",
+      "Pathological fracture", "Spiral Fracture", "Pelvis Fracture", "Non_Fractured"
+    ]
+  }
