@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediScan 3D - Advanced Disease Detection System</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe, #bae6fd);
+            min-height: 100vh;
+            color: #1e293b;
+        }
+
+        /* Medical theme animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.6); }
+        }
+
+        @keyframes rotate-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .medical-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .medical-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .medical-rotate {
+            animation: rotate-slow 20s linear infinite;
+        }
+
+        /* Floating background elements */
+        .bg-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .bg-element {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.6;
+        }
+
+        .bg-element:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            width: 16px;
+            height: 16px;
+            background: rgba(59, 130, 246, 0.2);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .bg-element:nth-child(2) {
+            top: 40%;
+            right: 20%;
+            width: 24px;
+            height: 24px;
+            background: rgba(16, 185, 129, 0.3);
+            animation: float 3s ease-in-out infinite 1s;
+        }
+
+        .bg-element:nth-child(3) {
+            bottom: 40%;
+            left: 20%;
+            width: 12px;
+            height: 12px;
+            background: rgba(59, 130, 246, 0.25);
+            animation: float 3s ease-in-out infinite 2s;
+        }
+
+        .bg-element:nth-child(4) {
+            bottom: 20%;
+            right: 10%;
+            width: 20px;
+            height: 20px;
+            background: rgba(16, 185, 129, 0.2);
+            animation: float 3s ease-in-out infinite 0.5s;
+        }
+
+        .bg-element:nth-child(5) {
+            top: 50%;
+            left: 50%;
+            width: 32px;
+            height: 32px;
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            background: transparent;
+            animation: rotate-slow 20s linear infinite;
+        }
+
+        /* Glass card effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Navigation */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            padding: 1rem 2rem;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #3b82f6, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #3b82f6, #10b981);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #1e293b;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+
+        /* Main content */
+        .main-content {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #3b82f6, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #64748b;
+            margin-bottom: 2rem;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            color: #64748b;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #10b981);
+            color: white;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #3b82f6;
+            border: 2px solid #3b82f6;
+        }
+
+        .btn-outline:hover {
+            background: #3b82f6;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Stats section */
+        .stats-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 3rem 0;
+            margin: 3rem 0;
+            border-radius: 16px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-item {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #3b82f6;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        /* Features section */
+        .features-section {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #3b82f6, #10b981);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+
+        .feature-description {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        /* Models section */
+        .models-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4rem 0;
+            margin: 3rem 0;
+            border-radius: 16px;
+        }
+
+        .models-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .model-card {
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .model-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .model-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .model-name {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .model-accuracy {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .model-description {
+            color: #64748b;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        /* Upload section */
+        .upload-section {
+            display: none;
+            padding: 2rem 0;
+        }
+
+        .upload-section.active {
+            display: block;
+        }
+
+        .upload-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .upload-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-area:hover, .upload-area.dragover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .upload-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #3b82f6, #10b981);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .upload-text {
+            color: #64748b;
+            margin-bottom: 1rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .model-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            background: white;
+        }
+
+        .analyze-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #3b82f6, #10b981);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .analyze-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
+        }
+
+        .analyze-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .results-area {
+            padding: 2rem;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .results-area.has-results {
+            text-align: left;
+        }
+
+        .result-card {
+            margin-bottom: 2rem;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3b82f6;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-confidence {
+            color: #64748b;
+            margin-bottom: 1rem;
+        }
+
+        .confidence-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #3b82f6, #10b981);
+            transition: width 0.5s ease;
+        }
+
+        .result-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        /* Chat section */
+        .chat-section {
+            display: none;
+            padding: 2rem 0;
+        }
+
+        .chat-section.active {
+            display: block;
+        }
+
+        .chat-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            background: white;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-content {
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            line-height: 1.5;
+        }
+
+        .message.bot .message-content {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .message.user .message-content {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .message-content h3, .message-content h4 {
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+
+        }
+
+        .message-content ul {
+            padding-left: 1.25rem;
+            margin-bottom: 1rem;
+            list-style: disc;
+        
+        }
+
+        .message-content p {
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+        }
+
+        .send-btn {
+            padding: 0.75rem 1.5rem;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* History section */
+        .history-section {
+            display: none;
+            padding: 2rem 0;
+        }
+
+        .history-section.active {
+            display: block;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            background: white;
+        }
+
+        .history-info {
+            flex: 1;
+        }
+
+        .history-filename {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .history-details {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .history-result {
+            text-align: right;
+        }
+
+        .history-prediction {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .history-confidence {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .upload-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading spinner */
+        .spinner {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3b82f6;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating background elements -->
+    <div class="bg-elements">
+        <div class="bg-element"></div>
+        <div class="bg-element"></div>
+        <div class="bg-element"></div>
+        <div class="bg-element"></div>
+        <div class="bg-element"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar glass-card">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">🧠</div>
+                MediScan 3D
+            </div>
+            <div class="nav-links">
+                <a href="#" class="nav-link active" onclick="showSection('home')">Home</a>
+                <a href="#" class="nav-link" onclick="showSection('upload')">Upload & Diagnose</a>
+                <a href="#" class="nav-link" onclick="showSection('chat')">AI Assistant</a>
+                <a href="#" class="nav-link" onclick="showSection('history')">History</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Section -->
+        <section id="home-section" class="section active">
+            <!-- Hero Section -->
+            <div class="hero-section">
+                <h1 class="hero-title medical-glow">MediScan 3D</h1>
+                <p class="hero-subtitle">Advanced Disease Detection System powered by AI</p>
+                <p class="hero-description">
+                    Upload medical images and get instant, accurate analysis from our state-of-the-art AI models. 
+                    Detect cancer, COVID-19, skin diseases, bone fractures, and more with professional-grade precision.
+                </p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary" onclick="showSection('upload')">
+                        Start Analysis →
+                    </button>
+                    <button class="btn btn-outline" onclick="showSection('chat')">
+                        Try AI Assistant 💬
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="stats-section glass-card">
+                <div class="stats-grid">
+                    <div class="stat-item" style="animation-delay: 0s;">
+                        <div class="stat-value">99.2%</div>
+                        <div class="stat-label">Accuracy Rate</div>
+                    </div>
+                    <div class="stat-item" style="animation-delay: 0.2s;">
+                        <div class="stat-value">5+</div>
+                        <div class="stat-label">AI Models</div>
+                    </div>
+                    <div class="stat-item" style="animation-delay: 0.4s;">
+                        <div class="stat-value">&lt;3s</div>
+                        <div class="stat-label">Analysis Time</div>
+                    </div>
+                    <div class="stat-item" style="animation-delay: 0.6s;">
+                        <div class="stat-value">24/7</div>
+                        <div class="stat-label">Availability</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="features-section">
+                <h2 class="section-title">Powerful Features for Medical Analysis</h2>
+                <p class="section-subtitle">
+                    Our comprehensive platform combines cutting-edge AI technology with intuitive design 
+                    to provide accurate medical image analysis and personalized health insights.
+                </p>
+                <div class="features-grid">
+                    <div class="feature-card glass-card" style="animation-delay: 0s;">
+                        <div class="feature-icon">🧠</div>
+                        <h3 class="feature-title">AI-Powered Analysis</h3>
+                        <p class="feature-description">
+                            Advanced machine learning models for accurate disease detection across multiple medical domains.
+                        </p>
+                    </div>
+                    <div class="feature-card glass-card" style="animation-delay: 0.3s;">
+                        <div class="feature-icon">💬</div>
+                        <h3 class="feature-title">Intelligent Assistant</h3>
+                        <p class="feature-description">
+                            Get personalized medical guidance and answers to your health questions from our AI assistant.
+                        </p>
+                    </div>
+                    <div class="feature-card glass-card" style="animation-delay: 0.6s;">
+                        <div class="feature-icon">📊</div>
+                        <h3 class="feature-title">Detailed Insights</h3>
+                        <p class="feature-description">
+                            Comprehensive visualization and analysis of your medical images with confidence scores.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Models Section -->
+            <div class="models-section glass-card">
+                <h2 class="section-title">Advanced AI Models</h2>
+                <p class="section-subtitle">
+                    Our platform features specialized AI models trained on extensive medical datasets 
+                    to provide accurate diagnosis across multiple medical domains.
+                </p>
+                <div class="models-grid" id="models-grid">
+                    <!-- Models will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Upload Section -->
+        <section id="upload-section" class="upload-section">
+            <h1 class="section-title">Upload & Diagnose</h1>
+            <p class="section-subtitle">Upload your medical images for AI-powered analysis</p>
+            
+            <div class="upload-grid">
+                <div class="glass-card" style="padding: 2rem;">
+                    <h3 style="margin-bottom: 1rem;">📤 Image Upload</h3>
+                    <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
+                        <div class="upload-icon">📁</div>
+                        <div class="upload-text">
+                            <p><strong>Drop your image here, or <span style="color: #3b82f6;">browse</span></strong></p>
+                            <p style="font-size: 0.875rem; margin-top: 0.5rem;">Supports JPG, PNG, and other image formats</p>
+                        </div>
+                        <input type="file" id="file-input" class="file-input" accept="image/*" onchange="handleFileSelect(event)">
+                    </div>
+                    <div id="selected-image" style="margin-top: 1rem; text-align: center; display: none;">
+                        <img id="preview-image" style="max-width: 100%; max-height: 200px; border-radius: 8px;">
+                        <p id="file-name" style="margin-top: 0.5rem; color: #64748b; font-size: 0.875rem;"></p>
+                        <button onclick="clearFile()" style="margin-top: 0.5rem; padding: 0.5rem 1rem; background: #ef4444; color: white; border: none; border-radius: 6px; cursor: pointer;">Remove Image</button>
+                    </div>
+                    
+                    <h3 style="margin: 2rem 0 1rem;">🧠 AI Model Selection</h3>
+                    <select id="model-select" class="model-select">
+                        <option value="">Select an AI model</option>
+                    </select>
+                    
+                    <button id="analyze-btn" class="analyze-btn" onclick="analyzeImage()" disabled>
+                        🧠 Start Analysis
+                    </button>
+                </div>
+                
+                <div class="glass-card results-area" id="results-area">
+                    <div style="text-align: center; color: #64748b;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">👁️</div>
+                        <h3 style="margin-bottom: 1rem;">Ready for Analysis</h3>
+                        <p>Upload an image and select a model to see detailed analysis results here.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chat Section -->
+        <section id="chat-section" class="chat-section">
+            <h1 class="section-title">AI Medical Assistant</h1>
+            <p class="section-subtitle">Get personalized medical guidance and answers to your health questions</p>
+            
+            <div class="chat-container glass-card" style="padding: 2rem;">
+                <div class="chat-messages" id="chat-messages">
+                    <div style="text-align: center; padding: 2rem; color: #64748b;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">🤖</div>
+                        <h3 style="margin-bottom: 1rem;">Welcome to MediScan AI Assistant</h3>
+                        <p>Upload an image for diagnosis first, then I'll provide personalized guidance based on your results.</p>
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="chat-input" class="chat-input" placeholder="Ask me about your diagnosis or any health questions..." onkeypress="handleChatKeyPress(event)">
+                    <button class="send-btn" onclick="sendMessage()">Send</button>
+                </div>
+                <p style="font-size: 0.75rem; color: #64748b; margin-top: 0.5rem;">
+                    This AI assistant provides general guidance. Always consult healthcare professionals for medical decisions.
+                </p>
+            </div>
+        </section>
+
+        <!-- History Section -->
+        <section id="history-section" class="history-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <div>
+                    <h1 class="section-title" style="text-align: left; margin-bottom: 0.5rem;">Analysis History</h1>
+                    <p style="color: #64748b;">View your previous medical image analyses and results</p>
+                </div>
+                <button onclick="clearHistory()" style="padding: 0.5rem 1rem; background: #ef4444; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                    🗑️ Clear History
+                </button>
+            </div>
+            
+            <div id="history-content">
+                <!-- History will be loaded here -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const API_BASE_URL = 'http://127.0.0.1:5000/api';
+        let selectedFile = null;
+        let models = [];
+        let history = [];
+        let latestPrediction = null;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadModels();
+            loadHistory();
+            setupDragAndDrop();
+        });
+
+        // Navigation
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section, .upload-section, .chat-section, .history-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + '-section').classList.add('active');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Load models from API
+        async function loadModels() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/models`);
+                const data = await response.json();
+                models = data.models;
+                
+                // Populate model select
+                const select = document.getElementById('model-select');
+                models.forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model.id;
+                    option.textContent = model.name;
+                    select.appendChild(option);
+                });
+                
+                // Populate models grid
+                const grid = document.getElementById('models-grid');
+                const modelData = [
+                    { name: "Cancer Detection Model", description: "Multi-cancer detection across various organs and tissue types", accuracy: "98.5%" },
+                    { name: "COVID Infection Detection", description: "COVID-19 infection detection from chest X-rays and CT scans", accuracy: "97.8%" },
+                    { name: "Skin Disease Detection (ISIC)", description: "ISIC-based skin lesion and melanoma detection system", accuracy: "96.2%" },
+                    { name: "Bone Fracture Detection", description: "Comprehensive fracture analysis and classification", accuracy: "99.1%" },
+                    { name: "COVID Segmentation Model", description: "Detailed lung segmentation and COVID-19 progression analysis", accuracy: "95.7%" }
+                ];
+                
+                modelData.forEach(model => {
+                    const card = document.createElement('div');
+                    card.className = 'model-card glass-card';
+                    card.innerHTML = `
+                        <div class="model-header">
+                            <div class="model-name">${model.name}</div>
+                            <div class="model-accuracy">${model.accuracy}</div>
+                        </div>
+                        <div class="model-description">${model.description}</div>
+                    `;
+                    grid.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Failed to load models:', error);
+            }
+        }
+
+        // Setup drag and drop
+        function setupDragAndDrop() {
+            const uploadArea = document.getElementById('upload-area');
+            
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            uploadArea.addEventListener('drop', handleDrop, false);
+        }
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        function highlight(e) {
+            document.getElementById('upload-area').classList.add('dragover');
+        }
+
+        function unhighlight(e) {
+            document.getElementById('upload-area').classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        }
+
+        function handleFile(file) {
+            selectedFile = file;
+            
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('preview-image').src = e.target.result;
+                document.getElementById('file-name').textContent = file.name;
+                document.getElementById('selected-image').style.display = 'block';
+                updateAnalyzeButton();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearFile() {
+            selectedFile = null;
+            document.getElementById('selected-image').style.display = 'none';
+            document.getElementById('file-input').value = '';
+            updateAnalyzeButton();
+        }
+
+        function updateAnalyzeButton() {
+            const btn = document.getElementById('analyze-btn');
+            const modelSelect = document.getElementById('model-select');
+            btn.disabled = !selectedFile || !modelSelect.value;
+        }
+
+        // Update button when model is selected
+        document.getElementById('model-select').addEventListener('change', updateAnalyzeButton);
+
+        // Analyze image
+        async function analyzeImage() {
+            if (!selectedFile || !document.getElementById('model-select').value) return;
+            
+            const btn = document.getElementById('analyze-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="spinner"></span>Analyzing...';
+            btn.disabled = true;
+            
+            const formData = new FormData();
+            formData.append('image', selectedFile);
+            formData.append('model', document.getElementById('model-select').value);
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/predict`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                displayResults(result);
+                latestPrediction = result;
+                
+                // Add to history
+                const historyItem = {
+                    timestamp: new Date().toISOString(),
+                    filename: selectedFile.name,
+                    model: result.model_display_name,
+                    prediction: result.prediction,
+                    confidence: result.confidence
+                };
+                
+                await fetch(`${API_BASE_URL}/history`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(historyItem)
+                });
+                
+                history.unshift(historyItem);
+                updateHistoryDisplay();
+                
+            } catch (error) {
+                console.error('Analysis failed:', error);
+                alert('Analysis failed. Please try again.');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                updateAnalyzeButton();
+            }
+        }
+
+        function displayResults(result) {
+            const resultsArea = document.getElementById('results-area');
+            resultsArea.className = 'glass-card results-area has-results';
+            
+            resultsArea.innerHTML = `
+                <div class="result-card">
+                    <h3 style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                        🎯 Diagnosis Result
+                    </h3>
+                    <div class="result-title">${result.prediction}</div>
+                    <div class="result-confidence">Confidence: ${result.confidence}%</div>
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" style="width: ${result.confidence}%"></div>
+                    </div>
+                    <div style="font-size: 0.875rem; color: #64748b;">Model: ${result.model_display_name}</div>
+                </div>
+                
+                <div class="result-card">
+                    <h3 style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                        📊 Analysis Visualization
+                    </h3>
+                    <div style="margin-bottom: 1rem;">
+                        <h4 style="margin-bottom: 0.5rem;">Heatmap Analysis</h4>
+                        <img src="data:image/png;base64,${result.heatmap_image}" class="result-image" alt="Heatmap">
+                        <p style="font-size: 0.875rem; color: #64748b;">Red areas indicate regions of high model attention</p>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: 0.5rem;">Region of Interest</h4>
+                        <img src="data:image/png;base64,${result.roi_image}" class="result-image" alt="ROI">
+                        <p style="font-size: 0.875rem; color: #64748b;">Red boxes highlight regions identified by the AI</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Chat functionality
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            addMessage('user', message);
+            input.value = '';
+            
+            // Send to API
+            sendToAPI(message);
+        }
+
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function addMessage(type, content) {
+            const messagesContainer = document.getElementById('chat-messages');
+
+    // Clear welcome message if it exists
+            if (messagesContainer.children.length === 1 && messagesContainer.children[0].style.textAlign === 'center') {
+                messagesContainer.innerHTML = '';
+           }
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+
+            const icon = type === 'user' ? '👤' : '🤖';
+
+    // Parse markdown only for bot responses
+            const htmlContent = type === 'bot' ? marked.parse(content) : content;
+
+            messageDiv.innerHTML = `
+                <div style="font-size: 1.5rem;">${icon}</div>
+                <div class="message-content">${htmlContent}</div>
+            `;
+
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        async function sendToAPI(message) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message })
+                });
+                
+                const data = await response.json();
+                addMessage('bot', data.response);
+                
+                if (data.status === 'placeholder') {
+                    addMessage('bot', '⚠️ Note: This is a placeholder response. Full AI integration coming soon!');
+                }
+            } catch (error) {
+                addMessage('bot', 'Sorry, I encountered an error. Please try again later.');
+            }
+        }
+
+        // Initialize chat with prediction
+        function initializeChatWithPrediction() {
+            if (latestPrediction) {
+                const initialMessage = `Hello! I see you've received a diagnosis of "${latestPrediction.prediction}" with ${latestPrediction.confidence}% confidence using the ${latestPrediction.model_display_name}.
+
+I'm here to help you understand your results and answer any questions you might have about your health. What would you like to know?`;
+                
+                document.getElementById('chat-messages').innerHTML = '';
+                addMessage('bot', initialMessage);
+            }
+        }
+
+        // History functionality
+        async function loadHistory() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/history`);
+                const data = await response.json();
+                history = data.history || [];
+                updateHistoryDisplay();
+            } catch (error) {
+                console.error('Failed to load history:', error);
+            }
+        }
+
+        function updateHistoryDisplay() {
+            const historyContent = document.getElementById('history-content');
+            
+            if (history.length === 0) {
+                historyContent.innerHTML = `
+                    <div class="glass-card" style="padding: 3rem; text-align: center;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">📋</div>
+                        <h3 style="margin-bottom: 1rem;">No Analysis History</h3>
+                        <p style="color: #64748b;">Your analysis history will appear here after you upload and analyze medical images.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Stats
+            const totalAnalyses = history.length;
+            const avgConfidence = Math.round(history.reduce((sum, item) => sum + item.confidence, 0) / history.length);
+            const uniqueDays = new Set(history.map(item => new Date(item.timestamp).toDateString())).size;
+            
+            historyContent.innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                    <div class="glass-card" style="padding: 1.5rem; text-align: center;">
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                            <div style="font-size: 2rem;">🧠</div>
+                            <div>
+                                <div style="font-size: 1.5rem; font-weight: bold;">${totalAnalyses}</div>
+                                <div style="font-size: 0.875rem; color: #64748b;">Total Analyses</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card" style="padding: 1.5rem; text-align: center;">
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                            <div style="font-size: 2rem;">📈</div>
+                            <div>
+                                <div style="font-size: 1.5rem; font-weight: bold;">${avgConfidence}%</div>
+                                <div style="font-size: 0.875rem; color: #64748b;">Avg Confidence</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card" style="padding: 1.5rem; text-align: center;">
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                            <div style="font-size: 2rem;">📅</div>
+                            <div>
+                                <div style="font-size: 1.5rem; font-weight: bold;">${uniqueDays}</div>
+                                <div style="font-size: 0.875rem; color: #64748b;">Days Active</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass-card" style="padding: 2rem;">
+                    <h3 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                        📋 Analysis Records
+                    </h3>
+                    <div style="max-height: 400px; overflow-y: auto;">
+                        ${history.map(item => `
+                            <div class="history-item">
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #3b82f6, #10b981); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.25rem;">🧠</div>
+                                    <div class="history-info">
+                                        <div class="history-filename">${item.filename}</div>
+                                        <div class="history-details">
+                                            ${new Date(item.timestamp).toLocaleDateString()} • ${item.model}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="history-result">
+                                    <div class="history-prediction">${item.prediction}</div>
+                                    <div class="history-confidence">
+                                        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: ${getConfidenceColor(item.confidence)}; margin-right: 0.25rem;"></span>
+                                        ${item.confidence}% confidence
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function getConfidenceColor(confidence) {
+            if (confidence >= 90) return '#10b981';
+            if (confidence >= 70) return '#f59e0b';
+            return '#ef4444';
+        }
+
+        function clearHistory() {
+            if (confirm('Are you sure you want to clear all history?')) {
+                history = [];
+                updateHistoryDisplay();
+            }
+        }
+
+        // Update chat when switching to chat section
+        document.addEventListener('click', function(e) {
+            if (e.target.textContent === 'AI Assistant' && latestPrediction) {
+                setTimeout(initializeChatWithPrediction, 100);
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
