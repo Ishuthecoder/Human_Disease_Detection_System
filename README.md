@@ -141,15 +141,12 @@ http://localhost:5000
 | ![skin]("C:\Pictures\skin_disease.jpg") | Melanoma | 92.4% |
 
 
-##  Demo –  Video
+## 🎥 Demo Video
 
-A quick walkthrough of the Human Disease Detection System in action.
+> Click the image below to view the full video demo of the Human Disease Detection System in action.
 
-> 📽️ Watch the system in action – from uploading a disease image to receiving AI-generated health recommendations.
+[![Watch Demo](demo_screenshots/demo_thumbnail.png)](demo_screenshots/ezyZip.mp4)
 
-[![Watch Demo]("C:\Users\dubey\OneDrive\Pictures\Screenshots\Screenshot 2025-06-14 225504.png")]("C:\Documents\ezyZip.mp4")
-
-> _Click the thumbnail above or [click here to view the video]("C:\Documents\ezyZip.mp4")
 
 ##  Contributing
 
