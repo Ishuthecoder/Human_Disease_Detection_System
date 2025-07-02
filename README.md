@@ -147,10 +147,9 @@ A quick walkthrough of the Human Disease Detection System in action.
 
 > 📽️ Watch the system in action – from uploading a disease image to receiving AI-generated health recommendations.
 
-[![Watch Demo](C:\Users\dubey\OneDrive\Pictures\Screenshots\Screenshot 2025-06-14 225504.png)](C:\Documents\ezyZip.mp4)
+[![Watch Demo]("C:\Users\dubey\OneDrive\Pictures\Screenshots\Screenshot 2025-06-14 225504.png")]("C:\Documents\ezyZip.mp4")
 
-> _Click the thumbnail above or [click here to view the video](C:\Documents\ezyZip.mp4)_
-
+> _Click the thumbnail above or [click here to view the video](demo_screenshots/human_disease_detection_demo.mp4)
 
 ##  Contributing
 
