@@ -143,10 +143,7 @@ http://localhost:5000
 
 ## 🎥 Demo Video
 
-> Click the image below to view the full video demo of the Human Disease Detection System in action.
-
-[![Watch Demo](demo_screenshots/demo_thumbnail.png)](demo_screenshots/ezyZip.mp4)
-
+ezyZip.mp4.mp4
 
 ##  Contributing
 
