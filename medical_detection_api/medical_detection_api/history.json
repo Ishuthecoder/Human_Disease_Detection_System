@@ -1,0 +1,51 @@
+[
+  {
+    "timestamp": "2025-06-11T14:28:17.446Z",
+    "filename": "skin disease 1.jpeg",
+    "model": "Skin Disease Detection (ISIC)",
+    "prediction": "Dermatofibroma",
+    "confidence": 93.02
+  },
+  {
+    "timestamp": "2025-06-13T14:49:00.693Z",
+    "filename": "skin disease 1.jpeg",
+    "model": "Skin Disease Detection (ISIC)",
+    "prediction": "Benign keratosis",
+    "confidence": 91.79
+  },
+  {
+    "timestamp": "2025-06-13T17:03:01.484Z",
+    "filename": "Bone_dislocation.jpeg",
+    "model": "Bone Fracture Detection",
+    "prediction": "Greenstick fracture",
+    "confidence": 95.32
+  },
+  {
+    "timestamp": "2025-06-13T17:15:38.445Z",
+    "filename": "bone_fracture.jpeg",
+    "model": "Bone Fracture Detection",
+    "prediction": "Pathological fracture",
+    "confidence": 84.26
+  },
+  {
+    "timestamp": "2025-06-14T15:59:03.432Z",
+    "filename": "skin disease 1.jpeg",
+    "model": "Skin Disease Detection (ISIC)",
+    "prediction": "Skin Disease",
+    "confidence": 82.69
+  },
+  {
+    "timestamp": "2025-06-14T17:21:50.061Z",
+    "filename": "bone_fracture.jpeg",
+    "model": "Bone Fracture Detection",
+    "prediction": "Oblique fracture",
+    "confidence": 80.34
+  },
+  {
+    "timestamp": "2025-06-14T17:26:07.845Z",
+    "filename": "bone_fracture.jpeg",
+    "model": "Bone Fracture Detection",
+    "prediction": "Spiral Fracture",
+    "confidence": 88.52
+  }
+]
