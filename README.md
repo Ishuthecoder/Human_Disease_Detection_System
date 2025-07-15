@@ -137,13 +137,13 @@ http://localhost:5000
 
 | Input Image | Predicted Disease | Confidence |
 |-------------|-------------------|------------|
-| ![xray]("C:\Pictures\bone_fracture.jpg") | Greenstick | 98.7% |
-| ![skin]("C:\Pictures\skin_disease.jpg") | Melanoma | 92.4% |
+| ![[xray]("C:\Pictures\bone_fracture.jpg")](https://github.com/Ishuthecoder/Human_Disease_Detection_System/issues/3#issue-3231773406) | Greenstick | 98.7% |
+| ![[skin]("C:\Pictures\skin_disease.jpg") ](https://github.com/Ishuthecoder/Human_Disease_Detection_System/issues/3#issue-3231773406)| Melanoma | 92.4% |
 
 
 ## 🎥 Demo Video
 
-ezyZip.mp4.mp4
+[ezyZip.mp4.mp4](https://github.com/Ishuthecoder/Human_Disease_Detection_System/issues/2#issue-3231768594)
 
 ##  Contributing
 
