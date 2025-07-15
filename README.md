@@ -141,7 +141,7 @@ http://localhost:5000
 | ![[skin]("C:\Pictures\skin_disease.jpg") ](https://github.com/Ishuthecoder/Human_Disease_Detection_System/issues/3#issue-3231773406)| Melanoma | 92.4% |
 
 
-## 🎥 Demo Video
+##  Demo Video
 
 [ezyZip.mp4.mp4](https://github.com/Ishuthecoder/Human_Disease_Detection_System/issues/2#issue-3231768594)
 
